@@ -14,11 +14,18 @@ class FPSGAME_API AFPSObjectiveActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AFPSObjectiveActor();
-
+	
 protected:
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class USphereComponent* SphereComponent;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
