@@ -34,6 +34,10 @@ protected:
 	UCameraComponent* CameraComponent;
 
 public:
+
+	UPROPERTY(BlueprintReadOnly, Category = "Gameplay")
+	bool bIsCaringObjective;
+	
 	AFPSCharacter();
 
 	/** Projectile class to spawn */

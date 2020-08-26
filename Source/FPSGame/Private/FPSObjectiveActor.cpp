@@ -2,6 +2,8 @@
 
 
 #include "FPSObjectiveActor.h"
+
+#include "FPSCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -25,6 +27,13 @@ void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	PlayEffect();
+
+	auto FPSCharacter = Cast<AFPSCharacter>(OtherActor);
+	if (FPSCharacter)
+	{
+		FPSCharacter->bIsCaringObjective = true;
+		Destroy();
+	}
 }
 
 // Called when the game starts or when spawned
@@ -36,12 +45,12 @@ void AFPSObjectiveActor::BeginPlay()
 void AFPSObjectiveActor::PlayEffect() const
 {
 	UGameplayStatics::SpawnEmitterAtLocation(this, PickupEffect, GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation(), FMath::Clamp<float>(PickupSoundVolume, 0.f, 1.f));
 }
 
 // Called every frame
 void AFPSObjectiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

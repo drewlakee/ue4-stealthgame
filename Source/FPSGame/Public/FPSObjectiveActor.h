@@ -33,6 +33,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Pickup Effects")
 	UParticleSystem* PickupEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category="Pickup Sounds")
+	USoundBase* PickupSound;
+
+	UPROPERTY(EditDefaultsOnly, Category="Pickup Sounds")
+	float PickupSoundVolume = 1.f;
 	
 public:	
 	// Called every frame
