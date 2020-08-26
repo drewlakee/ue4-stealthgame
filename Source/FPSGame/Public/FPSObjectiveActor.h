@@ -11,20 +11,28 @@ class FPSGAME_API AFPSObjectiveActor : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+	
 	// Sets default values for this actor's properties
 	AFPSObjectiveActor();
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
 protected:
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void PlayEffect() const;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USphereComponent* SphereComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Pickup Effects")
+	UParticleSystem* PickupEffect;
 	
 public:	
 	// Called every frame
