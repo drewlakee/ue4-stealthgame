@@ -14,3 +14,14 @@ AFPSGameMode::AFPSGameMode()
 	// use our custom HUD class
 	HUDClass = AFPSHUD::StaticClass();
 }
+
+void AFPSGameMode::CompleteMission(APawn* InstigatorPawn)
+{
+	if (InstigatorPawn)
+	{
+		InstigatorPawn->DisableInput(nullptr); // in anyway disabling controller under that pawn
+	}
+
+	// Look implementation at blueprint
+	OnMissionCompleted(InstigatorPawn);	
+}

@@ -4,6 +4,7 @@
 #include "FPSExtractZone.h"
 
 #include "FPSCharacter.h"
+#include "FPSGameMode.h"
 #include "Components/BoxComponent.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -34,8 +35,16 @@ void AFPSExtractZone::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	AFPSCharacter* Player = Cast<AFPSCharacter>(OtherActor);
 	if (Player && Player->bIsCaringObjective)
 	{
-		// TODO handle action
-		UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneReachedSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneReachedSoundVolume, 0.f, 1.f));
+		AFPSGameMode* AfpsGameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
+
+		if (AfpsGameMode)
+		{
+			Player->bIsCaringObjective = false; // mission complete and objective reached end zone
+		
+			UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneReachedSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneReachedSoundVolume, 0.f, 1.f));
+
+			AfpsGameMode->CompleteMission(Player);	
+		}
 	}
 }
 
