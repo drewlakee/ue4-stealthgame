@@ -5,6 +5,8 @@
 
 #include "FPSCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFPSExtractZone::AFPSExtractZone()
@@ -20,6 +22,10 @@ AFPSExtractZone::AFPSExtractZone()
 	SetRootComponent(OverlapComponent);
 
 	OverlapComponent->OnComponentBeginOverlap.AddDynamic(this, &AFPSExtractZone::HandleOverlap);
+
+	DecalComponent = CreateDefaultSubobject<UDecalComponent>(FName("DecalComponents"));
+	DecalComponent->DecalSize = OverlapComponent->GetUnscaledBoxExtent();
+	DecalComponent->SetupAttachment(OverlapComponent);
 }
 
 void AFPSExtractZone::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -29,6 +35,7 @@ void AFPSExtractZone::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	if (Player && Player->bIsCaringObjective)
 	{
 		// TODO handle action
+		UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneReachedSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneReachedSoundVolume, 0.f, 1.f));
 	}
 }
 

@@ -20,6 +20,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UBoxComponent* OverlapComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	class UDecalComponent* DecalComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	USoundBase* ExtractZoneReachedSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	float ExtractZoneReachedSoundVolume = 1.f;
+
 	UFUNCTION()
 	void HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 };
