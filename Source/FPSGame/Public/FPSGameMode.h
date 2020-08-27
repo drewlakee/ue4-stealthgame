@@ -10,10 +10,14 @@ UCLASS()
 class AFPSGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-
+	
 public:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Spectating")
+	TSubclassOf<AActor> SpectatingActorClass;
+
 	AFPSGameMode();
+	void SetSpectatingViewPoint(APawn* InstigatorPawn);
 
 	void CompleteMission(APawn* InstigatorPawn);
 

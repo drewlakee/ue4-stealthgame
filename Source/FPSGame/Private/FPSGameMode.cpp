@@ -3,6 +3,8 @@
 #include "FPSGameMode.h"
 #include "FPSHUD.h"
 #include "FPSCharacter.h"
+#include "SpectatingViewPoint.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AFPSGameMode::AFPSGameMode()
@@ -15,6 +17,18 @@ AFPSGameMode::AFPSGameMode()
 	HUDClass = AFPSHUD::StaticClass();
 }
 
+void AFPSGameMode::SetSpectatingViewPoint(APawn* InstigatorPawn)
+{
+	APlayerController* PlayerController = Cast<APlayerController>(InstigatorPawn->GetController());
+	
+	AActor* SpectatingActor = UGameplayStatics::GetActorOfClass(this, SpectatingActorClass);
+	
+	if (SpectatingActor)
+	{
+		PlayerController->SetViewTargetWithBlend(SpectatingActor, 1.5f);	
+	}
+}
+
 void AFPSGameMode::CompleteMission(APawn* InstigatorPawn)
 {
 	if (InstigatorPawn)
@@ -22,6 +36,8 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn)
 		InstigatorPawn->DisableInput(nullptr); // in anyway disabling controller under that pawn
 	}
 
+	SetSpectatingViewPoint(InstigatorPawn);
+
 	// Look implementation at blueprint
-	OnMissionCompleted(InstigatorPawn);	
+	OnMissionCompleted(InstigatorPawn);
 }
