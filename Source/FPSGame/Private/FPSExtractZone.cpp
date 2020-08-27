@@ -33,17 +33,25 @@ void AFPSExtractZone::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPSCharacter* Player = Cast<AFPSCharacter>(OtherActor);
-	if (Player && Player->bIsCaringObjective)
+	if (Player)
 	{
 		AFPSGameMode* AfpsGameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
 
+		
 		if (AfpsGameMode)
 		{
-			Player->bIsCaringObjective = false; // mission complete and objective reached end zone
+			if (Player->bIsCaringObjective)
+			{
+				Player->bIsCaringObjective = false; // mission complete and objective reached end zone
 		
-			UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneReachedSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneReachedSoundVolume, 0.f, 1.f));
+				UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneReachedSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneReachedSoundVolume, 0.f, 1.f));	
 
-			AfpsGameMode->CompleteMission(Player);	
+				AfpsGameMode->CompleteMission(Player);	
+			}
+			else
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneWrongSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneWrongVolume, 0.f, 1.f));	
+			}
 		}
 	}
 }
