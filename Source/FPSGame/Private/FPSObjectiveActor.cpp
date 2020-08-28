@@ -48,9 +48,21 @@ void AFPSObjectiveActor::PlayEffect() const
 	UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation(), FMath::Clamp<float>(PickupSoundVolume, 0.f, 1.f));
 }
 
+void AFPSObjectiveActor::FlowInDeltaHeight(float DeltaTime)
+{
+	DeltaAtZ += DeltaTime;
+	float Sin = FMath::Sin(DeltaAtZ);
+
+	FVector ActorLocation = GetActorLocation();
+	ActorLocation.Z += Sin * FlowBound;
+	SetActorLocation(ActorLocation);
+}
+
 // Called every frame
 void AFPSObjectiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FlowInDeltaHeight(DeltaTime);
 }
 

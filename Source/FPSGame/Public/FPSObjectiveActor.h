@@ -17,6 +17,10 @@ public:
 	AFPSObjectiveActor();
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+private:
+
+	float DeltaAtZ = 0.f;
 	
 protected:
 	
@@ -24,6 +28,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void PlayEffect() const;
+	void FlowInDeltaHeight(float DeltaTime);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
@@ -34,11 +39,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Pickup Effects")
 	UParticleSystem* PickupEffect;
 
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Sounds")
+	UPROPERTY(EditDefaultsOnly, Category = "Pickup Sounds")
 	USoundBase* PickupSound;
 
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Sounds")
+	UPROPERTY(EditDefaultsOnly, Category = "Pickup Sounds")
 	float PickupSoundVolume = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Flow")
+	float FlowBound = 0.f;
 	
 public:	
 	// Called every frame
