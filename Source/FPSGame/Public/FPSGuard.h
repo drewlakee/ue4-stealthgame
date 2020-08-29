@@ -17,6 +17,11 @@ public:
 	AFPSGuard();
 
 protected:
+
+	FRotator OriginalRotation;
+
+	FTimerHandle TimerHandleResetRotation;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -28,6 +33,9 @@ protected:
 
 	UFUNCTION()
     void OnPawnHeard(APawn* InstigatorPawn, const FVector& Location, float Volume);
+
+	UFUNCTION()
+	void ResetRotation();
 
 public:	
 	// Called every frame

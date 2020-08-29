@@ -22,7 +22,8 @@ AFPSGuard::AFPSGuard()
 void AFPSGuard::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	OriginalRotation = GetActorRotation();
 }
 
 // Called every frame
@@ -42,5 +43,21 @@ void AFPSGuard::OnPawnSeen(APawn* Pawn)
 void AFPSGuard::OnPawnHeard(APawn* InstigatorPawn, const FVector& Location, float Volume)
 {
 	DrawDebugSphere(GetWorld(), Location, 100.f, 12, FColor::Yellow, false, 1.0f);
+
+	FVector Direction = Location - GetActorLocation();
+	Direction.Normalize();
+	FRotator NewLookDirection = FRotationMatrix::MakeFromX(Direction).Rotator();
+	NewLookDirection.Pitch = 0.0f;
+	NewLookDirection.Roll = 0.0f;
+	
+	SetActorRotation(NewLookDirection);
+
+	GetWorldTimerManager().ClearTimer(TimerHandleResetRotation);
+	GetWorldTimerManager().SetTimer(TimerHandleResetRotation, this, &AFPSGuard::ResetRotation, 3.0f, false);
+}
+
+void AFPSGuard::ResetRotation()
+{
+	SetActorRotation(OriginalRotation);
 }
 

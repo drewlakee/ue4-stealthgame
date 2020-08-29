@@ -69,7 +69,7 @@ void AFPSCharacter::Fire()
 		GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
 
 		// fire noise
-		NoiseEmitterComponent->MakeNoise(this, 1.0f, GetActorLocation());
+		// NoiseEmitterComponent->MakeNoise(this, 1.0f, GetActorLocation());
 	}
 
 	// try and play the sound if specified
