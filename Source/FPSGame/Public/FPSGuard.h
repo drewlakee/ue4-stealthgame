@@ -30,12 +30,16 @@ protected:
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
-
+	
 	UFUNCTION()
     void OnPawnHeard(APawn* InstigatorPawn, const FVector& Location, float Volume);
 
 	UFUNCTION()
 	void ResetRotation();
+
+	void LookAtInstigatorDirection(const FVector& Location);
+
+	void ResetLookDirectionAtOriginalAfterTimer();
 
 public:	
 	// Called every frame

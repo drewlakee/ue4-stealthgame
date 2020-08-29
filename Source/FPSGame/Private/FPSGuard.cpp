@@ -44,6 +44,13 @@ void AFPSGuard::OnPawnHeard(APawn* InstigatorPawn, const FVector& Location, floa
 {
 	DrawDebugSphere(GetWorld(), Location, 100.f, 12, FColor::Yellow, false, 1.0f);
 
+	LookAtInstigatorDirection(Location);
+
+	ResetLookDirectionAtOriginalAfterTimer();
+}
+
+void AFPSGuard::LookAtInstigatorDirection(const FVector& Location)
+{
 	FVector Direction = Location - GetActorLocation();
 	Direction.Normalize();
 	FRotator NewLookDirection = FRotationMatrix::MakeFromX(Direction).Rotator();
@@ -51,7 +58,10 @@ void AFPSGuard::OnPawnHeard(APawn* InstigatorPawn, const FVector& Location, floa
 	NewLookDirection.Roll = 0.0f;
 	
 	SetActorRotation(NewLookDirection);
+}
 
+void AFPSGuard::ResetLookDirectionAtOriginalAfterTimer()
+{
 	GetWorldTimerManager().ClearTimer(TimerHandleResetRotation);
 	GetWorldTimerManager().SetTimer(TimerHandleResetRotation, this, &AFPSGuard::ResetRotation, 3.0f, false);
 }
