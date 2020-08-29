@@ -33,6 +33,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Perception")
+	UPawnNoiseEmitterComponent* NoiseEmitterComponent;
+
 public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Gameplay")
