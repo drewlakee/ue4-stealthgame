@@ -15,6 +15,8 @@ AFPSGuard::AFPSGuard()
 	
 	PawnSensingComponent->OnSeePawn.AddDynamic(this, &AFPSGuard::OnPawnSeen);
 	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AFPSGuard::OnPawnHeard);
+
+	GuardState = EAIGuardState::Idle;
 }
 
 // Called when the game starts or when spawned
@@ -45,14 +47,20 @@ void AFPSGuard::OnPawnSeen(APawn* Pawn)
 {
 	if (!Pawn) return;
 
+	SetGuardState(EAIGuardState::Alerted);
+
 	SetFailedMission(Pawn);
 }
 
 void AFPSGuard::OnPawnHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
+	if (GuardState == EAIGuardState::Alerted) return; // alerted state have high priority
+	
 	LookAtInstigatorDirection(Location);
 
 	ResetLookDirectionAtOriginalAfterTimer();
+
+	SetGuardState(EAIGuardState::Suspicious);
 }
 
 void AFPSGuard::LookAtInstigatorDirection(const FVector& Location)
@@ -74,6 +82,23 @@ void AFPSGuard::ResetLookDirectionAtOriginalAfterTimer()
 
 void AFPSGuard::ResetRotation()
 {
+	if (GuardState == EAIGuardState::Alerted) return; // alerted state have high priority
+	
+	SetGuardState(EAIGuardState::Idle);
+	
 	SetActorRotation(OriginalRotation);
+}
+
+void AFPSGuard::SetGuardState(EAIGuardState NewState)
+{
+	if (GuardState == NewState)
+	{
+		return;
+	}
+
+	GuardState = NewState;
+
+	// look implementation at blueprint
+	OnGuardStateChange(NewState);
 }
 

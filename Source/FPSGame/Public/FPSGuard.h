@@ -7,6 +7,15 @@
 
 #include "FPSGuard.generated.h"
 
+UENUM(BlueprintType)
+enum class EAIGuardState : uint8
+{
+	Idle,
+	Suspicious,
+	Alerted
+};
+
+
 UCLASS()
 class FPSGAME_API AFPSGuard : public ACharacter
 {
@@ -21,6 +30,8 @@ protected:
 	FRotator OriginalRotation;
 
 	FTimerHandle TimerHandleResetRotation;
+
+	EAIGuardState GuardState;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,6 +53,11 @@ protected:
 	void LookAtInstigatorDirection(const FVector& Location);
 
 	void ResetLookDirectionAtOriginalAfterTimer();
+
+	void SetGuardState(EAIGuardState NewState);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AI")
+	void OnGuardStateChange(EAIGuardState NewState);
 
 public:	
 	// Called every frame
