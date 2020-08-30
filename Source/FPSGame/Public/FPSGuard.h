@@ -32,7 +32,7 @@ protected:
 	void OnPawnSeen(APawn* Pawn);
 	
 	UFUNCTION()
-    void OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume);
+    void OnPawnHeard(APawn* NoiseInstigator, const FVector& Location, float Volume);
 
 	UFUNCTION()
 	void ResetRotation();

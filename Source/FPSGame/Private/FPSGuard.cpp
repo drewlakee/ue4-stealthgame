@@ -2,7 +2,6 @@
 
 
 #include "FPSGuard.h"
-#include "DrawDebugHelpers.h"
 #include "FPSGameMode.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -15,7 +14,7 @@ AFPSGuard::AFPSGuard()
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(FName("PawnPerceptionComponent"));
 	
 	PawnSensingComponent->OnSeePawn.AddDynamic(this, &AFPSGuard::OnPawnSeen);
-	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AFPSGuard::OnNoiseHeard);
+	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AFPSGuard::OnPawnHeard);
 }
 
 // Called when the game starts or when spawned
@@ -45,16 +44,12 @@ void AFPSGuard::SetFailedMission(APawn* Pawn)
 void AFPSGuard::OnPawnSeen(APawn* Pawn)
 {
 	if (!Pawn) return;
-	
-	DrawDebugSphere(GetWorld(), Pawn->GetActorLocation(), 100.f, 12, FColor::Red, false, 1.0f);
 
 	SetFailedMission(Pawn);
 }
 
-void AFPSGuard::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
+void AFPSGuard::OnPawnHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
-	DrawDebugSphere(GetWorld(), Location, 100.f, 12, FColor::Yellow, false, 1.0f);
-
 	LookAtInstigatorDirection(Location);
 
 	ResetLookDirectionAtOriginalAfterTimer();
