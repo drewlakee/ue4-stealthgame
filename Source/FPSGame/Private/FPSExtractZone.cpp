@@ -2,7 +2,6 @@
 
 
 #include "FPSExtractZone.h"
-
 #include "FPSCharacter.h"
 #include "FPSGameMode.h"
 #include "Components/BoxComponent.h"
@@ -43,9 +42,6 @@ void AFPSExtractZone::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			if (PlayerCharacter->bIsCaringObjective)
 			{
 				PlayerCharacter->bIsCaringObjective = false; // mission complete and objective reached end zone
-		
-				UGameplayStatics::PlaySoundAtLocation(this, ExtractZoneReachedSound, GetActorLocation(),FMath::Clamp<float>(ExtractZoneReachedSoundVolume, 0.f, 1.f));	
-
 				AfpsGameMode->CompleteMission(PlayerCharacter, true);	// mission success complete
 			}
 			else

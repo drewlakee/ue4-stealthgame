@@ -33,9 +33,9 @@ void AFPSGuard::Tick(float DeltaTime)
 }
 
 void AFPSGuard::SetFailedMission(APawn* Pawn)
-{
+{	
 	AFPSGameMode* AfpsGameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
-	if (AfpsGameMode)
+	if (AfpsGameMode && !AfpsGameMode->bIsGameOver)
 	{
 		AfpsGameMode->CompleteMission(Pawn, false); // mission failed by player, because guard inspect him
 	}

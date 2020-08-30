@@ -13,6 +13,8 @@ AFPSGameMode::AFPSGameMode()
 
 	// use our custom HUD class
 	HUDClass = AFPSHUD::StaticClass();
+
+	bIsGameOver = false;
 }
 
 void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess)
@@ -24,6 +26,17 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess
 
 	SetSpectatingViewPoint(InstigatorPawn);
 
+	if (bIsMissionSuccess)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, MissionCompleteSuccessSound, InstigatorPawn->GetActorLocation(),FMath::Clamp<float>(MissionCompleteSuccessSoundVolume, 0.f, 1.f));	
+	}
+	else
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, MissionCompleteFailedSound, InstigatorPawn->GetActorLocation(),FMath::Clamp<float>(MissionCompleteSuccessSoundVolume, 0.f, 1.f));	
+	}
+
+	bIsGameOver = true;
+	
 	// Look implementation at blueprint
 	OnMissionCompleted(InstigatorPawn, bIsMissionSuccess);
 }

@@ -24,12 +24,6 @@ protected:
 	class UDecalComponent* DecalComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
-	USoundBase* ExtractZoneReachedSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
-	float ExtractZoneReachedSoundVolume = 1.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
 	USoundBase* ExtractZoneWrongSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
