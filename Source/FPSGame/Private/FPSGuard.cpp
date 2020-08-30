@@ -2,8 +2,8 @@
 
 
 #include "FPSGuard.h"
-
 #include "DrawDebugHelpers.h"
+#include "FPSGameMode.h"
 #include "Perception/PawnSensingComponent.h"
 
 // Sets default values
@@ -15,7 +15,7 @@ AFPSGuard::AFPSGuard()
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(FName("PawnPerceptionComponent"));
 	
 	PawnSensingComponent->OnSeePawn.AddDynamic(this, &AFPSGuard::OnPawnSeen);
-	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AFPSGuard::OnPawnHeard);
+	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AFPSGuard::OnNoiseHeard);
 }
 
 // Called when the game starts or when spawned
@@ -33,14 +33,25 @@ void AFPSGuard::Tick(float DeltaTime)
 
 }
 
+void AFPSGuard::SetFailedMission(APawn* Pawn)
+{
+	AFPSGameMode* AfpsGameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
+	if (AfpsGameMode)
+	{
+		AfpsGameMode->CompleteMission(Pawn, false); // mission failed by player, because guard inspect him
+	}
+}
+
 void AFPSGuard::OnPawnSeen(APawn* Pawn)
 {
 	if (!Pawn) return;
 	
 	DrawDebugSphere(GetWorld(), Pawn->GetActorLocation(), 100.f, 12, FColor::Red, false, 1.0f);
+
+	SetFailedMission(Pawn);
 }
 
-void AFPSGuard::OnPawnHeard(APawn* InstigatorPawn, const FVector& Location, float Volume)
+void AFPSGuard::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
 	DrawDebugSphere(GetWorld(), Location, 100.f, 12, FColor::Yellow, false, 1.0f);
 
