@@ -15,7 +15,6 @@ enum class EAIGuardState : uint8
 	Alerted
 };
 
-
 UCLASS()
 class FPSGAME_API AFPSGuard : public ACharacter
 {
@@ -25,8 +24,19 @@ public:
 	// Sets default values for this character's properties
 	AFPSGuard();
 
+	TArray<AActor*> GetPatrolPoints() const;
+
+	UPROPERTY(EditInstanceOnly, Category = "Patrol Navigation")
+	bool bIsPatrolling = true;
+
 protected:
 
+	UPROPERTY(VisibleAnywhere)
+	class UPawnSensingComponent* PawnSensingComponent;
+
+	UPROPERTY(EditInstanceOnly, Category = "Patrol Navigation")
+	TArray<AActor*> PatrolPoints;
+	
 	FRotator OriginalRotation;
 
 	FTimerHandle TimerHandleResetRotation;
@@ -36,9 +46,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere)
-	class UPawnSensingComponent* PawnSensingComponent;
-
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
 	
@@ -46,20 +53,18 @@ protected:
     void OnPawnHeard(APawn* NoiseInstigator, const FVector& Location, float Volume);
 
 	UFUNCTION()
-	void ResetRotation();
+	void ResetGuardState();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AI")
+	void OnGuardStateChange(EAIGuardState NewState);
 
 	void SetFailedMission(APawn* Pawn);
 
 	void LookAtInstigatorDirection(const FVector& Location);
 
-	void ResetLookDirectionAtOriginalAfterTimer();
+	void ResetGuardStateAtOriginalAfterTimer();
 
 	void SetGuardState(EAIGuardState NewState);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "AI")
-	void OnGuardStateChange(EAIGuardState NewState);
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void UpdatePatrollingState(bool bIsPatrollingToSet);
 };
