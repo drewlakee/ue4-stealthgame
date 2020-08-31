@@ -19,6 +19,8 @@ AFPSGameMode::AFPSGameMode()
 
 void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess)
 {
+	if (bIsGameOver) return;
+	
 	if (InstigatorPawn)
 	{
 		InstigatorPawn->DisableInput(nullptr); // in anyway disabling controller under that pawn

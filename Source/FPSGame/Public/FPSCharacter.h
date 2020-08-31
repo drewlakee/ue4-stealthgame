@@ -38,7 +38,7 @@ protected:
 
 public:
 
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
 	bool bIsCaringObjective;
 	
 	AFPSCharacter();
@@ -59,6 +59,10 @@ protected:
 	
 	/** Fires a projectile. */
 	void Fire();
+
+	/** Fire at client. */
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerFire();
 
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);

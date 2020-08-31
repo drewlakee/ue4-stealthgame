@@ -52,6 +52,28 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AFPSCharacter::Fire()
 {
+	ServerFire();
+
+	// try and play the sound if specified
+	if (FireSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+	}
+
+	// try and play a firing animation if specified
+	if (FireAnimation)
+	{
+		// Get the animation object for the arms mesh
+		UAnimInstance* AnimInstance = Mesh1PComponent->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->PlaySlotAnimationAsDynamicMontage(FireAnimation, "Arms", 0.0f);
+		}
+	}
+}
+
+void AFPSCharacter::ServerFire_Implementation()
+{
 	// try and fire a projectile
 	if (ProjectileClass)
 	{
@@ -71,23 +93,12 @@ void AFPSCharacter::Fire()
 		// fire noise
 		// NoiseEmitterComponent->MakeNoise(this, 1.0f, GetActorLocation());
 	}
+}
 
-	// try and play the sound if specified
-	if (FireSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
+bool AFPSCharacter::ServerFire_Validate()
+{
 
-	// try and play a firing animation if specified
-	if (FireAnimation)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1PComponent->GetAnimInstance();
-		if (AnimInstance)
-		{
-			AnimInstance->PlaySlotAnimationAsDynamicMontage(FireAnimation, "Arms", 0.0f);
-		}
-	}
+	return true;
 }
 
 
