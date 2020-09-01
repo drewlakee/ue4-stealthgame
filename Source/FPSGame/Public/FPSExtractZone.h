@@ -20,7 +20,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UBoxComponent* OverlapComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UDecalComponent* DecalComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sounds")

@@ -18,4 +18,18 @@ public:
 
     UFUNCTION(NetMulticast, Reliable)
     void MulticastOnMissionComplete(APawn* InstigatorPawn, bool bIsMissionSuccess);
+
+protected:
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+    USoundBase* MissionCompleteSuccessSound;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+    float MissionCompleteSuccessSoundVolume = 1.f;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+    USoundBase* MissionCompleteFailedSound;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+    float MissionCompleteFailedSoundVolume = 1.f;
 };

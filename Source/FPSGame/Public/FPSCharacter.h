@@ -38,7 +38,7 @@ protected:
 
 public:
 
-	UPROPERTY(Replicated, VisibleInstanceOnly, Category = "Gameplay")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Gameplay")
 	bool bIsCaringObjective;
 	
 	AFPSCharacter();

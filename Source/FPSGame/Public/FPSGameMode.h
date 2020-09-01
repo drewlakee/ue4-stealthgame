@@ -20,25 +20,10 @@ public:
 
 	void CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess);
 	
-	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
-	void OnMissionCompleted(APawn* InstigatorPawn, bool bIsMissionSuccess);
-
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Spectating")
 	TSubclassOf<AActor> SpectatingActorClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
-	USoundBase* MissionCompleteSuccessSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
-	float MissionCompleteSuccessSoundVolume = 1.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
-	USoundBase* MissionCompleteFailedSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
-	float MissionCompleteFailedSoundVolume = 1.f;
 	
 	void SetSpectatingViewPoint(APawn* InstigatorPawn);
 };
