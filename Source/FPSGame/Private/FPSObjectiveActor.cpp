@@ -21,6 +21,8 @@ AFPSObjectiveActor::AFPSObjectiveActor()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("MeshComponent"));
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	MeshComponent->SetupAttachment(SphereComponent);
+
+	SetReplicates(true);
 }
 
 void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -33,7 +35,7 @@ void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		FPSCharacter->bIsCaringObjective = true;
 		Destroy();
-	}
+	}		
 }
 
 // Called when the game starts or when spawned
