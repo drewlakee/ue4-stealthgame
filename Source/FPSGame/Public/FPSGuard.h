@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
 #include "FPSGuard.generated.h"
 
 UENUM(BlueprintType)
@@ -20,7 +19,13 @@ class FPSGAME_API AFPSGuard : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
+	
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
 public:
+	
 	// Sets default values for this character's properties
 	AFPSGuard();
 
@@ -36,15 +41,13 @@ protected:
 
 	UPROPERTY(EditInstanceOnly, Category = "Patrol Navigation")
 	TArray<AActor*> PatrolPoints;
+
+	UPROPERTY(ReplicatedUsing = OnRep_GuardState)
+	EAIGuardState GuardState;
 	
 	FRotator OriginalRotation;
 
 	FTimerHandle TimerHandleResetRotation;
-
-	EAIGuardState GuardState;
-	
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
@@ -58,6 +61,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "AI")
 	void OnGuardStateChange(EAIGuardState NewState);
 
+	UFUNCTION()
+	void OnRep_GuardState();
+	
 	void SetFailedMission(APawn* Pawn);
 
 	void LookAtInstigatorDirection(const FVector& Location);

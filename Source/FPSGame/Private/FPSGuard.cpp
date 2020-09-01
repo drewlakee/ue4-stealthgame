@@ -2,9 +2,9 @@
 
 
 #include "FPSGuard.h"
-
 #include "AIController.h"
 #include "FPSGameMode.h"
+#include "UnrealNetwork.h"
 #include "Perception/PawnSensingComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -102,9 +102,7 @@ void AFPSGuard::SetGuardState(EAIGuardState NewState)
 	}
 
 	GuardState = NewState;
-
-	// look implementation at blueprint
-	OnGuardStateChange(NewState);
+	OnRep_GuardState();
 }
 
 void AFPSGuard::UpdatePatrollingState(bool bIsPatrollingToSet)
@@ -120,5 +118,18 @@ void AFPSGuard::UpdatePatrollingState(bool bIsPatrollingToSet)
 			BlackboardComponent->SetValueAsBool(FName("IsPatrolling"), bIsPatrollingToSet);
 		}
 	}
+}
+
+void AFPSGuard::OnRep_GuardState()
+{
+	// calls by client side
+	OnGuardStateChange(GuardState);
+}
+
+void AFPSGuard::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AFPSGuard, GuardState);
 }
 
