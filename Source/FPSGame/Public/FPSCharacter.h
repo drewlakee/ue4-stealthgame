@@ -38,7 +38,7 @@ protected:
 
 public:
 
-	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+	UPROPERTY(Replicated, VisibleInstanceOnly, Category = "Gameplay")
 	bool bIsCaringObjective;
 	
 	AFPSCharacter();

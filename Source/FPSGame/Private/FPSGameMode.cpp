@@ -1,6 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "FPSGameMode.h"
+#include "FPSGameState.h"
 #include "FPSHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
@@ -15,15 +16,20 @@ AFPSGameMode::AFPSGameMode()
 	HUDClass = AFPSHUD::StaticClass();
 
 	bIsGameOver = false;
+
+	GameStateClass = AFPSGameState::StaticClass();
 }
 
 void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess)
 {
 	if (bIsGameOver) return;
 	
-	if (InstigatorPawn)
+	if (!InstigatorPawn) return;
+
+	AFPSGameState* GameState = GetGameState<AFPSGameState>();
+	if (GameState)
 	{
-		InstigatorPawn->DisableInput(nullptr); // in anyway disabling controller under that pawn
+		GameState->MulticastOnMissionComplete(InstigatorPawn, bIsMissionSuccess);
 	}
 
 	SetSpectatingViewPoint(InstigatorPawn);
