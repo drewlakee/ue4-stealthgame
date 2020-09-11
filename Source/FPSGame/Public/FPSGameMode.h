@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Spectating")
 	TSubclassOf<AActor> SpectatingActorClass;
 	
-	void SetSpectatingViewPoint(APawn* InstigatorPawn);
+	void SetAllPlayersAtSpectatingViewPoint() const;
 };
 
 

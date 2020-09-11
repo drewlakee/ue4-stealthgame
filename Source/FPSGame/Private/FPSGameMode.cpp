@@ -2,7 +2,6 @@
 
 #include "FPSGameMode.h"
 
-#include "FPSCharacter.h"
 #include "FPSGameState.h"
 #include "FPSHUD.h"
 #include "Kismet/GameplayStatics.h"
@@ -25,8 +24,8 @@ AFPSGameMode::AFPSGameMode()
 void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess)
 {
 	if (bIsGameOver) return;
-
-	SetSpectatingViewPointForAllPlayer();
+	
+	SetAllPlayersAtSpectatingViewPoint();
 
 	bIsGameOver = true;
 	
@@ -37,23 +36,22 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess
 	}
 }
 
-void AFPSGameMode::SetSpectatingViewPointForAllPlayer()
+void AFPSGameMode::SetAllPlayersAtSpectatingViewPoint() const
 {
-	TArray<AActor*> Players;
-	
-	UGameplayStatics::GetAllActorsOfClass(this, AFPSCharacter::StaticClass(), Players);
-	
 	AActor* SpectatingActor = UGameplayStatics::GetActorOfClass(this, SpectatingActorClass);
-	
-	if (SpectatingActor)
+
+	// if no spectating actor at level then we doesn't need to do next things
+	if (!SpectatingActor) return;
+
+	const int32 NumPlayerControllers = GetWorld()->GetNumPlayerControllers();
+
+	for (int32 PlayerControllerIndex = 0; PlayerControllerIndex < NumPlayerControllers; PlayerControllerIndex++)
 	{
-		for (AActor* PlayerActor : Players)
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, PlayerControllerIndex);
+		if (PlayerController)
 		{
-			AFPSCharacter* PlayerCharacter = Cast<AFPSCharacter>(PlayerActor);
-			if (PlayerCharacter)
-			{
-				PlayerCharacter->GetController()->CastToPlayerController()->SetViewTargetWithBlend(SpectatingActor, 1.5f);
-			}
-		}	
+			PlayerController->SetViewTargetWithBlend(SpectatingActor, 1.5f);
+		}
 	}
+	
 }
