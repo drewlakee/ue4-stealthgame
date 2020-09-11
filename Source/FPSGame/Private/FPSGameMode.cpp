@@ -1,6 +1,8 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "FPSGameMode.h"
+
+#include "FPSCharacter.h"
 #include "FPSGameState.h"
 #include "FPSHUD.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,10 +25,8 @@ AFPSGameMode::AFPSGameMode()
 void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess)
 {
 	if (bIsGameOver) return;
-	
-	if (!InstigatorPawn) return;
 
-	SetSpectatingViewPoint(InstigatorPawn);
+	SetSpectatingViewPointForAllPlayer();
 
 	bIsGameOver = true;
 	
@@ -37,14 +37,23 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissionSuccess
 	}
 }
 
-void AFPSGameMode::SetSpectatingViewPoint(APawn* InstigatorPawn)
+void AFPSGameMode::SetSpectatingViewPointForAllPlayer()
 {
-	APlayerController* PlayerController = Cast<APlayerController>(InstigatorPawn->GetController());
+	TArray<AActor*> Players;
+	
+	UGameplayStatics::GetAllActorsOfClass(this, AFPSCharacter::StaticClass(), Players);
 	
 	AActor* SpectatingActor = UGameplayStatics::GetActorOfClass(this, SpectatingActorClass);
 	
 	if (SpectatingActor)
 	{
-		PlayerController->SetViewTargetWithBlend(SpectatingActor, 1.5f);	
+		for (AActor* PlayerActor : Players)
+		{
+			AFPSCharacter* PlayerCharacter = Cast<AFPSCharacter>(PlayerActor);
+			if (PlayerCharacter)
+			{
+				PlayerCharacter->GetController()->CastToPlayerController()->SetViewTargetWithBlend(SpectatingActor, 1.5f);
+			}
+		}	
 	}
 }
